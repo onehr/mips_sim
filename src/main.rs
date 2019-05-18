@@ -31,6 +31,7 @@ fn print_usage() {
     print_info();
     println!();
     println!("Usage:");
+    println!("        cargo run");
     println!("        cargo run -- [mips_file]");
     println!();
     // print the actual usage
