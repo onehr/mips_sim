@@ -3,5 +3,7 @@ name = "mips_sim"
 version = "0.1.0"
 authors = ["Haorna Wang <waharaxn@gmail.com>"]
 edition = "2018"
+description = "A MIPS Architecture Simulator"
 
 [dependencies]
+linenoise-rust = "0.2.0"
