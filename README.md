@@ -1,5 +1,10 @@
 # MIPS Simulator.
 
+[![Build Status](https://travis-ci.com/onehr/mips_sim.svg?branch=master)](https://travis-ci.com/onehr/mips_sim)
+[![](https://tokei.rs/b1/github/onehr/mips_sim)](https://github.com/onehr/mips_sim)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/y/onehr/mips_sim.svg?style=flat)
+![GitHub](https://img.shields.io/github/license/onehr/mips_sim.svg)
+
 Note: Now I only decide to support R3000 version.
 
 ## Current Process
