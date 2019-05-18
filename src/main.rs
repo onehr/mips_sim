@@ -85,34 +85,33 @@ fn callback(input: &str) -> Vec<String> {
 }
 
 fn print_cmd_help_info() {
-      println!("exit  -- Exit the simulator");
-      println!("quit  -- Exit the simulator");
-      println!("read \"FILE\" -- Read FILE containing assembly code into memory");
-      println!("load \"FILE\" -- Same as read");
-      println!("run <ADDR> -- Start the program at (optional) ADDRESS");
-      println!("step <N> -- Step the program for N instructions (default 1)");
-      println!("continue -- Continue program execution without stepping");
-      println!("print $N -- Print register N");
-      println!("print $fN -- Print floating point register N");
-      println!("print ADDR -- Print contents of memory at ADDRESS");
-      println!("print_symbols -- Print all global symbols");
-      println!("print_all_regs -- Print all MIPS registers");
-      println!("print_all_regs hex -- Print all MIPS registers in hex");
-      println!("reinitialize -- Clear the memory and registers");
-      println!("breakpoint <ADDR> -- Set a breakpoint at address ADDR");
-      println!("delete <ADDR> -- Delete breakpoint at address ADDR");
-      println!("list -- List all breakpoints");
-      println!("dump [ \"FILE\" ] -- Dump binary code to spim.dump or FILE in network byte order");
-      println!("dumpnative [ \"FILE\" ] -- Dump binary code to spim.dump or FILE in host byte order");
-      println!(". -- Rest of line is assembly instruction to execute");
-      println!("<cr> -- Newline reexecutes previous command");
-      println!("? -- Print this message");
-      println!("\nMost commands can be abbreviated to their unique prefix");
-      println!("e.g., ex(it), re(ad), l(oad), ru(n), s(tep), p(rint)\n");
+    println!("exit  -- Exit the simulator");
+    println!("quit  -- Exit the simulator");
+    println!("[unimplemented] read \"FILE\" -- Read FILE containing assembly code into memory");
+    println!("[unimplemented] load \"FILE\" -- Same as read");
+    println!("[unimplemented] run <ADDR> -- Start the program at (optional) ADDRESS");
+    println!("[unimplemented] step <N> -- Step the program for N instructions (default 1)");
+    println!("[unimplemented] continue -- Continue program execution without stepping");
+    println!("[unimplemented] print $N -- Print register N");
+    println!("[unimplemented] print $fN -- Print floating point register N");
+    println!("[unimplemented] print ADDR -- Print contents of memory at ADDRESS");
+    println!("[unimplemented] print_symbols -- Print all global symbols");
+    println!("[unimplemented] print_all_regs -- Print all MIPS registers");
+    println!("[unimplemented] print_all_regs hex -- Print all MIPS registers in hex");
+    println!("[unimplemented] reinitialize -- Clear the memory and registers");
+    println!("[unimplemented] breakpoint <ADDR> -- Set a breakpoint at address ADDR");
+    println!("[unimplemented] delete <ADDR> -- Delete breakpoint at address ADDR");
+    println!("[unimplemented] list -- List all breakpoints");
+    println!("[unimplemented] dump [ \"FILE\" ] -- Dump binary code to spim.dump or FILE in network byte order");
+    println!("[unimplemented] dumpnative [ \"FILE\" ] -- Dump binary code to spim.dump or FILE in host byte order");
+    println!("[unimplemented] . -- Rest of line is assembly instruction to execute");
+    println!("[unimplemented] <cr> -- Newline reexecutes previous command");
+    println!("?, help -- Print this message");
+    println!("\nMost commands can be abbreviated to their unique prefix");
+    println!("e.g., ex(it), re(ad), l(oad), ru(n), s(tep), p(rint)\n");
 }
 
 fn handle_cmd(line: &String) -> Result<bool, String> {
-
     let args: Vec<&str> = line.split_whitespace().collect();
     if args.is_empty() {
         return Ok(true);
@@ -124,8 +123,7 @@ fn handle_cmd(line: &String) -> Result<bool, String> {
     } else if is_prefix(cmd, "?") || is_prefix(cmd, "help") {
         print_cmd_help_info();
         return Ok(true);
-    }
-    else {
+    } else {
         return Err(format!(
             "Unknown command `{}` or command not implemented",
             cmd
