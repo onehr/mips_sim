@@ -42,6 +42,14 @@ fn print_source_as_file(as_name: &str, source_as_file: &str) {
     println!();
 }
 
+fn is_prefix(s: &str, of: &str) -> bool {
+    if s.len() > of.len() {
+        return false;
+    }
+
+    return of.starts_with(s);
+}
+
 fn callback(input: &str) -> Vec<String> {
     let mut ret: Vec<&str> = Vec::new();
     let cmd_all = vec![
@@ -75,14 +83,8 @@ fn callback(input: &str) -> Vec<String> {
     return ret.iter().map(|s| s.to_string()).collect();
 }
 
-fn handle_cmd(line: &String) -> Result<bool, String> {
-    fn is_prefix(s: &str, of: &str) -> bool {
-        if s.len() > of.len() {
-            return false;
-        }
 
-        return of.starts_with(s);
-    }
+fn handle_cmd(line: &String) -> Result<bool, String> {
 
     let args: Vec<&str> = line.split_whitespace().collect();
     if args.is_empty() {
