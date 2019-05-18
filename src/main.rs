@@ -15,6 +15,8 @@ extern crate linenoise;
 
 use std::{error, fs};
 
+mod core;
+
 const PROJ: &'static str = env!("CARGO_PKG_NAME");
 const NAME: &'static str = env!("CARGO_PKG_DESCRIPTION");
 const VER: &'static str = env!("CARGO_PKG_VERSION");
@@ -170,6 +172,11 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             println!("MIPS assembly file: {}\n", as_name);
             let source_as_file = fs::read_to_string(as_name)?;
             print_source_as_file(&as_name, &source_as_file);
+            let continuable: bool = false;
+            // TODO: should be able to pass the arguments for the assembly program itself
+            //       to the program itself, now just set it to empty.
+            let program_args: Vec<String> = Vec::new();
+            core::utils::initialize_run_stack(&program_args);
         }
         _ => {
             print_usage();
