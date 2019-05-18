@@ -67,11 +67,12 @@ fn callback(input: &str) -> Vec<String> {
         "breakpoint",
         "list",
         "?",
+        "help",
     ];
 
     // iterate through cmd_all, and try to match the first character to find proper command tips.
     for str_ in cmd_all.iter() {
-        if input.starts_with(str_.chars().nth(0).unwrap()) {
+        if is_prefix(input, str_) {
             ret.push(&str_);
         }
     }
@@ -83,6 +84,32 @@ fn callback(input: &str) -> Vec<String> {
     return ret.iter().map(|s| s.to_string()).collect();
 }
 
+fn print_cmd_help_info() {
+      println!("exit  -- Exit the simulator");
+      println!("quit  -- Exit the simulator");
+      println!("read \"FILE\" -- Read FILE containing assembly code into memory");
+      println!("load \"FILE\" -- Same as read");
+      println!("run <ADDR> -- Start the program at (optional) ADDRESS");
+      println!("step <N> -- Step the program for N instructions (default 1)");
+      println!("continue -- Continue program execution without stepping");
+      println!("print $N -- Print register N");
+      println!("print $fN -- Print floating point register N");
+      println!("print ADDR -- Print contents of memory at ADDRESS");
+      println!("print_symbols -- Print all global symbols");
+      println!("print_all_regs -- Print all MIPS registers");
+      println!("print_all_regs hex -- Print all MIPS registers in hex");
+      println!("reinitialize -- Clear the memory and registers");
+      println!("breakpoint <ADDR> -- Set a breakpoint at address ADDR");
+      println!("delete <ADDR> -- Delete breakpoint at address ADDR");
+      println!("list -- List all breakpoints");
+      println!("dump [ \"FILE\" ] -- Dump binary code to spim.dump or FILE in network byte order");
+      println!("dumpnative [ \"FILE\" ] -- Dump binary code to spim.dump or FILE in host byte order");
+      println!(". -- Rest of line is assembly instruction to execute");
+      println!("<cr> -- Newline reexecutes previous command");
+      println!("? -- Print this message");
+      println!("\nMost commands can be abbreviated to their unique prefix");
+      println!("e.g., ex(it), re(ad), l(oad), ru(n), s(tep), p(rint)\n");
+}
 
 fn handle_cmd(line: &String) -> Result<bool, String> {
 
@@ -94,7 +121,11 @@ fn handle_cmd(line: &String) -> Result<bool, String> {
     let cmd = args[0];
     if is_prefix(cmd, "quit") || is_prefix(cmd, "exit") {
         return Ok(false);
-    } else {
+    } else if is_prefix(cmd, "?") || is_prefix(cmd, "help") {
+        print_cmd_help_info();
+        return Ok(true);
+    }
+    else {
         return Err(format!(
             "Unknown command `{}` or command not implemented",
             cmd
