@@ -7,3 +7,6 @@ description = "A MIPS Architecture Simulator"
 
 [dependencies]
 linenoise-rust = "0.2.0"
+structopt = "0.2.10"
+failure = "0.1.5"
+exitfailure = "0.5.1"

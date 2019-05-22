@@ -13,8 +13,6 @@
 //     limitations under the License.
 extern crate linenoise;
 
-use std::{error, fs};
-
 mod core;
 
 const PROJ: &'static str = env!("CARGO_PKG_NAME");
@@ -27,22 +25,6 @@ fn print_info() {
     println!("{}(v {}): {}", PROJ, VER, NAME);
     println!("Released under {}", LICENSE);
     println!("Copyright 2019 {}", AUTHORS);
-}
-
-fn print_usage() {
-    print_info();
-    println!();
-    println!("Usage:");
-    println!("        cargo run");
-    println!("        cargo run -- [mips_file]");
-    println!();
-    // print the actual usage
-}
-
-fn print_source_as_file(as_name: &str, source_as_file: &str) {
-    println!("[{}] contents:\n", as_name);
-    println!("{}", source_as_file);
-    println!();
 }
 
 fn is_prefix(s: &str, of: &str) -> bool {
@@ -73,7 +55,8 @@ fn callback(input: &str) -> Vec<String> {
         "help",
     ];
 
-    // iterate through cmd_all, and try to match the first character to find proper command tips.
+    // iterate through cmd_all, and try to match the first character to find proper
+    // command tips.
     for str_ in cmd_all.iter() {
         if is_prefix(input, str_) {
             ret.push(&str_);
@@ -134,11 +117,46 @@ fn handle_cmd(line: &String) -> Result<bool, String> {
     }
 }
 
-fn main() -> Result<(), Box<dyn error::Error>> {
-    let args: Vec<String> = std::env::args().collect();
+use structopt::StructOpt;
+/// Search for a pattern in a file and display the lines that contain it.
+#[derive(Debug, StructOpt)]
+struct Cli {
+    /// The path to the assembly file to read
+    #[structopt(parse(from_os_str))]
+    path: Option<std::path::PathBuf>,
+}
 
-    match args.len() {
-        1 => {
+use exitfailure::ExitFailure;
+use failure::ResultExt;
+fn main() -> Result<(), ExitFailure> {
+    use std::fs::File;
+    use std::io::prelude::*;
+    use std::io::BufReader;
+
+    let args = Cli::from_args();
+    match args.path {
+        Some(file_path) => {
+            // TODO: now just print the assembly file.
+            print_info();
+            println!("MIPS assembly file: {:?}\n", file_path);
+            let _continuable: bool = false;
+            // TODO: should be able to pass the arguments for the assembly program itself
+            //       to the program itself, now just set it to empty.
+            let program_args: Vec<String> = Vec::new();
+            core::utils::initialize_run_stack(&program_args);
+            let tmp_path = file_path.clone();
+            let file = File::open(file_path)
+                .with_context(|_| format!("could not read file `{:#?}`", tmp_path))?;
+
+            let mut buf_reader = BufReader::new(file);
+            let mut contents = String::new();
+            buf_reader
+                .read_to_string(&mut contents)
+                .with_context(|_| format!("could not read file `{:#?}`", tmp_path))?;
+
+            println!("file content: {}", contents);
+        }
+        None => {
             print_info();
             println!();
 
@@ -164,22 +182,6 @@ fn main() -> Result<(), Box<dyn error::Error>> {
                     }
                 }
             }
-        }
-        2 => {
-            // TODO: now just print the assembly file.
-            let as_name = args.get(1).unwrap(); // assembly file name
-            print_info();
-            println!("MIPS assembly file: {}\n", as_name);
-            let source_as_file = fs::read_to_string(as_name)?;
-            print_source_as_file(&as_name, &source_as_file);
-            let continuable: bool = false;
-            // TODO: should be able to pass the arguments for the assembly program itself
-            //       to the program itself, now just set it to empty.
-            let program_args: Vec<String> = Vec::new();
-            core::utils::initialize_run_stack(&program_args);
-        }
-        _ => {
-            print_usage();
         }
     }
 
